@@ -1,0 +1,44 @@
+<div class="app">
+  <h1>ToDoリスト</h1>
+
+  <div class="input-row">
+    <input
+      [(ngModel)]="newText"
+      type="text"
+      placeholder="新しいタスクを入力..."
+      maxlength="200"
+      (keydown.enter)="addTodo()"
+    />
+    <button (click)="addTodo()">追加</button>
+  </div>
+
+  <div class="filters">
+    <button [class.active]="filter() === 'all'"    (click)="setFilter('all')">すべて</button>
+    <button [class.active]="filter() === 'active'" (click)="setFilter('active')">未完了</button>
+    <button [class.active]="filter() === 'done'"   (click)="setFilter('done')">完了済み</button>
+  </div>
+
+  <ul class="todo-list">
+    @if (visible().length === 0) {
+      <li class="empty">タスクがありません</li>
+    } @else {
+      @for (todo of visible(); track todo.id) {
+        <li>
+          <input
+            type="checkbox"
+            [checked]="todo.done"
+            (change)="toggle(todo.id, $any($event.target).checked)"
+            aria-label="完了切替"
+          />
+          <span class="todo-text" [class.done]="todo.done">{{ todo.text }}</span>
+          <button class="delete-btn" (click)="delete(todo.id)" aria-label="削除">✕</button>
+        </li>
+      }
+    }
+  </ul>
+
+  <div class="footer">
+    <span>残り {{ remaining() }} / {{ total() }} 件</span>
+    <button class="clear-btn" (click)="clearDone()">完了済みを削除</button>
+  </div>
+</div>
