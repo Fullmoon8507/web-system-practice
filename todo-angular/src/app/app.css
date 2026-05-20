@@ -81,6 +81,10 @@
   animation: fadeIn 0.2s ease;
 }
 
+.todo-item [matListItemIcon] {
+  align-self: center;
+}
+
 .todo-item:hover {
   background: rgba(0, 0, 0, 0.04);
 }
