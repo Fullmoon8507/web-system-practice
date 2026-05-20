@@ -81,6 +81,10 @@
   animation: fadeIn 0.2s ease;
 }
 
+.todo-item ::ng-deep .mdc-list-item__start {
+  align-self: center;
+}
+
 .todo-item [matListItemIcon] {
   align-self: center;
 }
