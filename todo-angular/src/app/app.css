@@ -76,13 +76,13 @@
 }
 
 .todo-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
   border-radius: 8px;
   transition: background 0.15s;
   animation: fadeIn 0.2s ease;
-}
-
-.todo-item [matListItemIcon] {
-  align-self: center;
 }
 
 .todo-item:hover {

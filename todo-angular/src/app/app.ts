@@ -6,7 +6,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatListModule } from '@angular/material/list';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -31,7 +30,6 @@ const STORAGE_KEY = 'todos-v1';
     MatButtonModule,
     MatIconModule,
     MatCheckboxModule,
-    MatListModule,
     MatChipsModule,
     MatCardModule,
     MatDividerModule,
