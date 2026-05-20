@@ -1,54 +1,108 @@
-<div class="app">
-  <div class="app-header">
-    <h1>ToDoリスト</h1>
-    <span class="angular-badge">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 250" width="20" height="20" aria-hidden="true">
-        <path fill="#DD0031" d="M125 30L31.9 63.2l14.2 123.1L125 230l78.9-43.7 14.2-123.1z"/>
-        <path fill="#C3002F" d="M125 30v22.2-.1V230l78.9-43.7 14.2-123.1L125 30z"/>
-        <path fill="#fff" d="M125 52.1L66.8 182.6h21.7l11.7-29.2h49.4l11.7 29.2H183L125 52.1zm17 83.3h-34l17-40.9 17 40.9z"/>
-      </svg>
-      Angular
-    </span>
-  </div>
+<mat-toolbar color="primary" class="app-toolbar">
+  <mat-icon>check_circle</mat-icon>
+  <span class="toolbar-title">ToDoリスト</span>
+  <span class="toolbar-spacer"></span>
+  <span class="angular-badge">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 250 250"
+      width="18"
+      height="18"
+      aria-hidden="true"
+    >
+      <path
+        fill="#fff"
+        d="M125 30L31.9 63.2l14.2 123.1L125 230l78.9-43.7 14.2-123.1z"
+        fill-opacity="0.4"
+      />
+      <path
+        fill="#fff"
+        d="M125 52.1L66.8 182.6h21.7l11.7-29.2h49.4l11.7 29.2H183L125 52.1zm17 83.3h-34l17-40.9 17 40.9z"
+      />
+    </svg>
+    Angular
+  </span>
+</mat-toolbar>
 
-  <div class="input-row">
-    <input
-      [(ngModel)]="newText"
-      type="text"
-      placeholder="新しいタスクを入力..."
-      maxlength="200"
-      (keydown.enter)="addTodo()"
-    />
-    <button (click)="addTodo()">追加</button>
-  </div>
-
-  <div class="filters">
-    <button [class.active]="filter() === 'all'"    (click)="setFilter('all')">すべて</button>
-    <button [class.active]="filter() === 'active'" (click)="setFilter('active')">未完了</button>
-    <button [class.active]="filter() === 'done'"   (click)="setFilter('done')">完了済み</button>
-  </div>
-
-  <ul class="todo-list">
-    @if (visible().length === 0) {
-      <li class="empty">タスクがありません</li>
-    } @else {
-      @for (todo of visible(); track todo.id) {
-        <li>
+<div class="app-container">
+  <mat-card class="todo-card">
+    <mat-card-content>
+      <div class="input-row">
+        <mat-form-field appearance="outline" class="todo-input">
+          <mat-label>新しいタスクを入力</mat-label>
           <input
-            type="checkbox"
-            [checked]="todo.done"
-            (change)="toggle(todo.id, $any($event.target).checked)"
-            aria-label="完了切替"
+            matInput
+            [(ngModel)]="newText"
+            placeholder="例：買い物に行く"
+            maxlength="200"
+            (keydown.enter)="addTodo()"
           />
-          <span class="todo-text" [class.done]="todo.done">{{ todo.text }}</span>
-          <button class="delete-btn" (click)="delete(todo.id)" aria-label="削除">✕</button>
-        </li>
-      }
-    }
-  </ul>
+          <mat-icon matSuffix>edit</mat-icon>
+        </mat-form-field>
+        <button mat-fab extended color="primary" (click)="addTodo()" class="add-btn">
+          <mat-icon>add</mat-icon>
+          追加
+        </button>
+      </div>
 
-  <div class="footer">
-    <span>残り {{ remaining() }} / {{ total() }} 件</span>
-    <button class="clear-btn" (click)="clearDone()">完了済みを削除</button>
-  </div>
+      <mat-chip-listbox class="filter-chips" aria-label="フィルター">
+        <mat-chip-option [selected]="filter() === 'all'" (click)="setFilter('all')">
+          すべて
+        </mat-chip-option>
+        <mat-chip-option [selected]="filter() === 'active'" (click)="setFilter('active')">
+          未完了
+        </mat-chip-option>
+        <mat-chip-option [selected]="filter() === 'done'" (click)="setFilter('done')">
+          完了済み
+        </mat-chip-option>
+      </mat-chip-listbox>
+
+      <mat-divider class="section-divider"></mat-divider>
+
+      <mat-list class="todo-list">
+        @if (visible().length === 0) {
+          <div class="empty-state">
+            <mat-icon class="empty-icon">inbox</mat-icon>
+            <p>タスクがありません</p>
+          </div>
+        } @else {
+          @for (todo of visible(); track todo.id) {
+            <mat-list-item class="todo-item" [class.done]="todo.done">
+              <mat-checkbox
+                matListItemIcon
+                [checked]="todo.done"
+                (change)="toggle(todo.id, $event.checked)"
+                color="primary"
+                aria-label="完了切替"
+              ></mat-checkbox>
+              <span matListItemTitle class="todo-text" [class.done]="todo.done">{{
+                todo.text
+              }}</span>
+              <button
+                matListItemMeta
+                mat-icon-button
+                (click)="delete(todo.id)"
+                aria-label="削除"
+                class="delete-btn"
+              >
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </mat-list-item>
+          }
+        }
+      </mat-list>
+
+      <mat-divider></mat-divider>
+
+      <div class="footer">
+        <span class="footer-count"
+          >残り <strong>{{ remaining() }}</strong> / {{ total() }} 件</span
+        >
+        <button mat-button color="warn" (click)="clearDone()" [disabled]="remaining() === total()">
+          <mat-icon>delete_sweep</mat-icon>
+          完了済みを削除
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

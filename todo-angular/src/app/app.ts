@@ -1,5 +1,15 @@
 import { Component, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatListModule } from '@angular/material/list';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 
 interface Todo {
   id: number;
@@ -13,9 +23,21 @@ const STORAGE_KEY = 'todos-v1';
 
 @Component({
   selector: 'app-root',
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    MatToolbarModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatListModule,
+    MatChipsModule,
+    MatCardModule,
+    MatDividerModule,
+  ],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
   todos = signal<Todo[]>(this.load());
@@ -24,17 +46,18 @@ export class App {
 
   visible = computed(() => {
     const f = this.filter();
-    return this.todos().filter(t =>
-      f === 'all' ? true : f === 'done' ? t.done : !t.done
-    );
+    return this.todos().filter((t) => (f === 'all' ? true : f === 'done' ? t.done : !t.done));
   });
 
-  remaining = computed(() => this.todos().filter(t => !t.done).length);
+  remaining = computed(() => this.todos().filter((t) => !t.done).length);
   total = computed(() => this.todos().length);
 
   private load(): Todo[] {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null') ?? []; }
-    catch { return []; }
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null') ?? [];
+    } catch {
+      return [];
+    }
   }
 
   private save() {
@@ -44,25 +67,23 @@ export class App {
   addTodo() {
     const text = this.newText.trim();
     if (!text) return;
-    this.todos.update(list => [{ id: Date.now(), text, done: false }, ...list]);
+    this.todos.update((list) => [{ id: Date.now(), text, done: false }, ...list]);
     this.save();
     this.newText = '';
   }
 
   toggle(id: number, done: boolean) {
-    this.todos.update(list =>
-      list.map(t => t.id === id ? { ...t, done } : t)
-    );
+    this.todos.update((list) => list.map((t) => (t.id === id ? { ...t, done } : t)));
     this.save();
   }
 
   delete(id: number) {
-    this.todos.update(list => list.filter(t => t.id !== id));
+    this.todos.update((list) => list.filter((t) => t.id !== id));
     this.save();
   }
 
   clearDone() {
-    this.todos.update(list => list.filter(t => !t.done));
+    this.todos.update((list) => list.filter((t) => !t.done));
     this.save();
   }
 
