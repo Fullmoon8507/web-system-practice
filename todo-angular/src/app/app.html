@@ -59,7 +59,7 @@
 
       <mat-divider class="section-divider"></mat-divider>
 
-      <mat-list class="todo-list">
+      <div class="todo-list">
         @if (visible().length === 0) {
           <div class="empty-state">
             <mat-icon class="empty-icon">inbox</mat-icon>
@@ -67,19 +67,15 @@
           </div>
         } @else {
           @for (todo of visible(); track todo.id) {
-            <mat-list-item class="todo-item" [class.done]="todo.done">
+            <div class="todo-item">
               <mat-checkbox
-                matListItemIcon
                 [checked]="todo.done"
                 (change)="toggle(todo.id, $event.checked)"
                 color="primary"
                 aria-label="完了切替"
               ></mat-checkbox>
-              <span matListItemTitle class="todo-text" [class.done]="todo.done">{{
-                todo.text
-              }}</span>
+              <span class="todo-text" [class.done]="todo.done">{{ todo.text }}</span>
               <button
-                matListItemMeta
                 mat-icon-button
                 (click)="delete(todo.id)"
                 aria-label="削除"
@@ -87,10 +83,10 @@
               >
                 <mat-icon>delete_outline</mat-icon>
               </button>
-            </mat-list-item>
+            </div>
           }
         }
-      </mat-list>
+      </div>
 
       <mat-divider></mat-divider>
 
